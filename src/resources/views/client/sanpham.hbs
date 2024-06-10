@@ -1,0 +1,28 @@
+<!--Sản phẩm   row: chua nhieu san pham 
+ -->
+{{> header}}
+
+
+
+
+<!--Sản phẩm-->
+<section class="products" id="products">
+    <div class="heading">
+        <br>
+        <h2>Sản phẩm</h2>
+    </div>
+    <!--container-->
+    <div class="products-container">
+        {{#each Books}}
+        <div class="box">
+            <img src="{{this.productImage}}" alt="">
+            <h3>{{this.name}}</h3>
+            <div class="content">
+                <span>{{this.price}}.000đ</span>
+                <a href="book/detail/{{this._id}}">Xem chi tiết</a>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+</section>
+{{> footer}}

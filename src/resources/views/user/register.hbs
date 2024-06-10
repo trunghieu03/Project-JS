@@ -1,0 +1,88 @@
+{{> header1}}
+<div id="form-container" class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <form class="p-4 border rounded-3 bg-light" id="form-register">
+            <h2 class="text-center mb-4 fs-6">ĐĂNG KÝ</h2>
+            <div class="mb-3">
+                <label for="username" class="form-label"></label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Tên đăng nhập">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label"></label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Mật khẩu">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label"></label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label"></label>
+                <input type="phone" class="form-control" id="phone" name="phone" placeholder="Số điện thoại">
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
+        </form>
+    </div>
+    {{> footer}}
+    <script>
+        $(document).ready(function () {
+            $('#form-register').submit(function (event) {
+                event.preventDefault();
+
+                var username = $("#username").val();
+                var password = $("#password").val();
+                var email = $("#email").val();
+                var phone = $("#phone").val();
+
+                if (!username || !password || !email || !phone) {
+                    Swal.fire({
+                        title: "Vui lòng điền đầy đủ thông tin",
+                        icon: "error"
+                    });
+                    return;
+                }
+
+                var phonePattern = /^[0-9]+$/;
+                if (!phonePattern.test(phone)) {
+                    Swal.fire({
+                        title: "Số điện thoại không hợp lệ",
+                        icon: "error",
+                    });
+                    return;
+                }
+
+                $.ajax({
+                    url: "/created",
+                    method: "POST",
+                    data: {
+                        username: username,
+                        password: password,
+                        email: email,
+                        phone: phone
+                    },
+                    success: function (response) {
+                        if (response.message == 'Đăng ký thành công') {
+                            Swal.fire({
+                                title: response.message,
+                                icon: "Success",
+                                text: "Bấm để chuyển sang trang đăng nhập",
+                            }).then((result) => {
+if (result.isConfirmed) {
+                                    window.location.href = "/login";
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                title: response.message,
+                                icon: "error",
+                            });
+                        }
+                    },
+                    error: function () {
+                        Swal.fire({
+                            title: "Đã xảy ra lỗi trong quá trình",
+                            icon: "error",
+                        });
+                    }
+                });
+            });
+        });
+    </script>

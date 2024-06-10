@@ -1,0 +1,108 @@
+{{> header1}}
+<div id="form-container" class="d-flex justify-content-center align-items-center">
+    <form class="p-4 border rounded-3 bg-light" id="form-login">
+        <h2 class="text-center mb-4 fs-6">ĐĂNG NHẬP</h2>
+        <div class="mb-3">
+            <label for="username" class="form-label"></label>
+            <input type="text" class="form-control" id="username" name="username" placeholder="Tên đăng nhập">
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label"></label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="Mật khẩu">
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+        <a href="/register" class="btn btn-secondary w-100 mt-2">Đăng ký</a>
+    </form>
+</div>
+{{> footer}}
+<script>
+    function setCookie(cname, cvalue, exdays) {
+        const d = new Date();
+        d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+        let expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for (let i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    $(document).ready(function () {
+        $("#form-login").submit(function (event) {
+            event.preventDefault();
+
+            var username = $("#username").val();
+            var password = $("#password").val();
+
+            if (!username || !password) {
+                Swal.fire({
+                    title: "vui long nhap day du thong tin!",
+                    icon: "error"
+                });
+                return;
+            }
+
+            $.ajax({
+                url: "/logined",
+                method: "POST",
+                data: {
+                    username: $('#username').val(),
+                    password: $('#password').val()
+                },
+                success: function (response) {
+                    if (response.message == 'admin') {
+                        setCookie('token', response.token, 1);
+                        Swal.fire({
+                            title: "dang nhap thanh cong Admin!",
+                            icon: "success",
+                            timer: 2000,
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            },
+                            willClose: () => {
+                                window.location.href = "/admin";
+                            }
+                        })
+                    } else if (response.message == 'user') {
+                        setCookie('token', response.token, 1);
+                        Swal.fire({
+                            title: "dang nhap thanh cong user!",
+                            icon: "success",
+                            timer: 2000,
+                            showConfirmButton: false,
+                            timerProgressBar: true,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            },
+                            willClose: () => {
+                                window.location.href = "/trangchu";
+                            }
+                        })
+                    } else {
+                        Swal.fire({
+                            title: response.message,
+                            icon: "error",
+                        });
+                    }
+                },
+                error: function () {
+                    alert("da xay ra loi trong qua trinh dang nhap");
+                }
+            });
+        });
+    });
+</script>

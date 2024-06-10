@@ -1,0 +1,26 @@
+{{> headerAdmin}}
+<form method="POST" action="/admin/saveUpdate/{{book._id}}?_method=PUT" id="form-sua" >
+<h1>Sửa sản phẩm</h1>
+
+  <div class="mb-3" >
+    <label for="exampleInputEmail1" class="form-label">Tên sản phầm</label>
+    <input type="text" class="form-control" value="{{book.name}}" id="name" name="name" >
+  </div>
+  <div class="mb-3">
+    <label for="exampleInputPassword1" class="form-label">Gía</label>
+    <input type="text" class="form-control" value="{{book.price}}" id="price" name="price">
+  </div>
+   <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Link ảnh sản phầm</label>
+    <input type="text" class="form-control" value="{{book.productImage}}" id="productImage" name="productImage">
+  </div>
+   <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Mô tả</label>
+    <textarea class="form-control" id="productDescription" name="productDescription">{{book.productDescription}}</textarea>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+{{> bodyadmin}}
+

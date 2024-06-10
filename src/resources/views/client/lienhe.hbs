@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liên hệ</title>
+    <style>
+        .flex-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .contact-section,
+        .about-text {
+            padding: 20px;
+        }
+
+        .contact-section {
+            background-color: #f9f9f9;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .box {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Phần liên hệ */
+        .about {
+            background-color: #f9f9f9;
+            padding: 50px 0;
+        }
+
+       
+        .about-text {
+            flex-basis: 60%;
+        }
+
+        .about-text h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .box {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+        }
+
+        #contact-form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        #contact-form label {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        #contact-form input[type="text"],
+        #contact-form input[type="email"] {
+            width: 100%;
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #contact-form input[type="submit"] {
+            background-color: black;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            align-self: flex-end;
+        }
+
+        #contact-form input[type="submit"]:hover {
+            background-color: white;
+            color: black;
+
+        }
+
+       
+    </style>
+</head>
+
+<body>
+    {{> header}}
+    <br>
+    <br>
+    <div class="flex-container">
+        <div class="contact-section">
+            <div class="box">
+                <h2>Liên hệ</h2>
+                <form id="contact-form">
+                    <label for="name">Họ và Tên:</label>
+                    <input type="text" id="name" name="name" placeholder="Nhập tên của bạn" required>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="Nhập email của bạn" required>
+                    <input type="submit" value="Gửi" class="btn">
+                </form>
+            </div>
+        </div>
+        <div class="about" id="about">
+            <div class="about-text">
+                <h2>Động lực và cảm xúc của quốc gia</h2>
+                <p>Động lực và Cảm Xúc quốc gia dùng để nuôi dưỡng Khát vọng quốc gia, gồm 5 cấp độ từ thấp đến cao là:
+                    Sợ hãi, Sân hận, Tham muốn, Khẳng định – ái kỷ – mạn ngã, Trắc ẩn – yêu thương – trách nhiệm. Sợ hãi
+                    là cấp độ thấp nhất của hệ động lực của một quốc gia. Ở cấp độ này, quốc gia chỉ mưu cầu sự tồn tại,
+                    mục tiêu của quốc gia chỉ là xóa đói giảm nghèo trong thời bình và luôn bị khống chế hoặc đe dọa bởi
+                    ngoại bang. ...</p>
+            </div>
+        </div>
+    </div>
+    {{> footer}}
+</body>
+
+</html>

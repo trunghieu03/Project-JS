@@ -1,0 +1,109 @@
+<style>
+    .search-box {
+        position: absolute;
+        top: 100px;
+        left: calc(100% - 290px);
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 10px;
+        max-width: 300px;
+        border: 1px solid #ccc;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .book-info-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .book-image {
+        width: 50px;
+        height: auto;
+        margin-right: 10px;
+    }
+
+    .book-name {
+        font-weight: bold;
+    }
+
+    .book-price {
+        margin-left: 10px;
+    }
+</style>
+
+
+<header>
+    <a href="#" class="logo">
+        <img src="/img/mau-logo-nha-sach.jpg" alt="">
+    </a>
+    <i class='bx bx-menu' id="menu-icon"></i>
+    <ul class="navbar">
+        <li><a href="/trangchu">Trang chủ</a></li>
+        <li><a href="/gioithieu">Giới thiệu</a></li>
+        <li><a href="/sanpham">Sản Phẩm</a></li>
+        <li><a href="/lienhe">Liên hệ</a></li>
+    </ul>
+    <div class="header-icon">
+        <form id="searchForm" class="d-flex">
+            <input class="form-control me-2" type="search" id="searchInput" placeholder="Tìm kiếm"
+                aria-label="Tìm kiếm">
+        </form>
+        <a href="/cart"><i class='bx bx-cart-alt'></i></a>
+        <a href="/login"><i class='bx bxs-user'></i></a>
+    </div>
+</header>
+
+<!-- Kết quả tìm kiếm -->
+<div id="searchResults" class="search-box"></div>
+
+<script>
+    const searchForm = document.getElementById('searchForm');
+    const searchInput = document.getElementById('searchInput');
+    const searchResultsContainer = document.getElementById('searchResults');
+
+    searchInput.addEventListener('input', async () => {
+        const query = searchInput.value;
+
+        try {
+            const response = await fetch(`/search?query=${query}`);
+            const searchResults = await response.json();
+            displaySearchResults(searchResults);
+        } catch (error) {
+            console.error('Error searching:', error);
+        }
+    });
+
+    function displaySearchResults(results) {
+        searchResultsContainer.innerHTML = '';
+
+        if (results.length === 0) {
+            const noResultsMessage = document.createElement('p');
+            noResultsMessage.textContent = 'Không tìm thấy kết quả.';
+            searchResultsContainer.appendChild(noResultsMessage);
+            return;
+        }
+
+        results.forEach(result => {
+            const resultContainer = document.createElement('div');
+            resultContainer.classList.add('book-info-container');
+
+            const imageElement = document.createElement('img');
+            imageElement.classList.add('book-image');
+            imageElement.src = result.productImage || '';
+
+            const nameElement = document.createElement('span');
+            nameElement.classList.add('book-name');
+            nameElement.textContent = result.name;
+
+            const priceElement = document.createElement('span');
+            priceElement.classList.add('book-price');
+            priceElement.textContent = result.price;
+
+            resultContainer.appendChild(imageElement);
+            resultContainer.appendChild(nameElement);
+            resultContainer.appendChild(priceElement);
+
+            searchResultsContainer.appendChild(resultContainer);
+        });
+    }
+</script>

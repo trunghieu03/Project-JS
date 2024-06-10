@@ -1,0 +1,39 @@
+{{> header}}
+<br>
+<br><br>
+<br>
+<div class="card mb-3" style="max-width: 1400px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="{{book.productImage}}" class="img-fluid rounded-start" alt="{{book.name}}">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title " style="font-size: 26px; font-weight: bold;  color: #333; ">{{book.name}}</h5>
+        <h5 class="card-title " style="font-size: 20px; font-weight: bold;  color: red; ">{{book.price}}.000đ</h5>
+        <p class="card-text">{{book.productDescription}}</p>
+        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      <form id="addToCartForm" action="/book/addtocart/{{book._id}}" method="POST">
+  <div class="input-group mb-3">
+    <label for="quantity" class="input-group-text">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" value="1" min="1" class="form-control">
+    <button type="submit" class="btn btn-primary">Add to Cart</button>
+  </div>
+</form>
+
+
+
+
+        {{#if errorMessage}}
+          <p style="color: red;">{{errorMessage}}</p>
+        {{/if}}
+       {{#if successMessage}}
+       <div class="alert alert-success" role="alert">
+       {{successMessage}}
+      </div>
+      {{/if}}
+      </div>
+    </div>
+  </div>
+</div>
+{{> footer}}
