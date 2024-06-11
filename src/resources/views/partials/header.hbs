@@ -73,7 +73,7 @@
         }
     });
 
-    function displaySearchResults(results) {
+   function displaySearchResults(results) {
         searchResultsContainer.innerHTML = '';
 
         if (results.length === 0) {
@@ -91,9 +91,15 @@
             imageElement.classList.add('book-image');
             imageElement.src = result.productImage || '';
 
-            const nameElement = document.createElement('span');
+            const nameElement = document.createElement('a');
             nameElement.classList.add('book-name');
+            nameElement.href = `/book/detail/${result._id}`; // Đường dẫn đến trang chi tiết sản phẩm
             nameElement.textContent = result.name;
+
+            nameElement.addEventListener('click', (event) => {
+                event.preventDefault(); // Ngăn chặn hành vi mặc định của liên kết
+                window.location.href = nameElement.href; // Chuyển hướng đến trang chi tiết
+            });
 
             const priceElement = document.createElement('span');
             priceElement.classList.add('book-price');

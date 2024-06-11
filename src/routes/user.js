@@ -12,7 +12,7 @@ router.get('/gioithieu', userController.gioithieu);
 router.get('/lienhe', userController.lienhe);
 router.get('/sanpham', userController.sanpham);
 
-router.post('cart/delete/', userController.deleteItemCart);
+// router.post('/cart/remove', userController.deleteItemCart);
 router.post('/created', userController.created);
 router.post('/logined', userController.logined);
 module.exports = router;

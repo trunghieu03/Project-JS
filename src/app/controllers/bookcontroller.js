@@ -13,10 +13,10 @@ class bookcontroller {
             .catch(next);
     }
 
-    async appToCart(req, res) {
-        const { id } = req.params; 
+    async appToCart(req, res) {  //sẽ trả về một promise 
+        const { id } = req.params; //id cuốn sách
         const { quantity } = req.body;//req.body là một đối tượng chứa dữ liệu của phần thân của yêu cầu HTTP (HTTP request body).
-        const book = await Book.findById(id); //Nó cho phép bạn chờ đợi một promise được hoàn thành và xử lý kết quả một cách dễ dàng và hiệu quả. Kết hợp với async, await
+        const book = await Book.findById(id); //Nó được sử dụng để đợi cho một promise được giải quyết (resolved), và chỉ tiếp tục thực thi khi promise đó được giải quyết.
         try {
             if (!book) {
                 res.render('client/detailsProduct', 

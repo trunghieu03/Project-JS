@@ -118,28 +118,23 @@ class UserController {
 //hien thi cart
 async cart(req, res, next) {
   try {
-      const cart = await Cart.findOne().populate('items.bookId');
-      
-      if (!cart || cart.items.length === 0) {
-          return res.render('client/cart', { cart: null, message: 'Giỏ hàng của bạn hiện đang trống.' });
-      }
-
+      const cart = await Cart.findOne().populate('items.bookId');   //lay id book hiện các thong tin sp
       // Xử lý dữ liệu giỏ hàng để gộp các mục có bookId trùng nhau (nếu có)
-      const processedItems = [];
-      const itemMap = new Map();
+      const processedItems = [];  //mang luu tru sau khi gop
+      const itemMap = new Map();  //mang gop
 
       for (const item of cart.items) {
           const itemId = item.bookId._id.toString();
-          if (itemMap.has(itemId)) {
+          if (itemMap.has(itemId)) {   //có id tuong tu chua
               const existingItem = itemMap.get(itemId);
               existingItem.quantity += item.quantity;
-              existingItem.price += item.price * item.quantity; // Adjust the total price correctly
+              existingItem.price += item.price * item.quantity; // tổng giá 
           } else {
               itemMap.set(itemId, {
                   bookId: item.bookId,
                   name: item.name,
                   quantity: item.quantity,
-                  price: item.price * item.quantity, // Adjust the total price correctly
+                  price: item.price * item.quantity,  // tổng giá 
                   productImage: item.productImage
               });
           }
@@ -153,37 +148,41 @@ async cart(req, res, next) {
       next(error);
   }
 }
+// async deleteItemCart(req, res, next) {
+//   const { id } = req.params;
+//   try {
+//       // Tìm giỏ hàng trong cơ sở dữ liệu
+//       const cart = await Cart.findOne();
 
+//       // Kiểm tra tính hợp lệ của giỏ hàng
+//       if (!cart) {
+//           return res.status(404).json({ message: 'Cart not found' });
+//       }
 
+//       // Tìm vị trí của cuốn sách trong giỏ hàng
+//       const index = cart.items.findIndex(item => item.bookId === id);
 
-  async deleteItemCart(req, res, next) {
-    const { id } = req.params;
-    try {
-        // Tìm giỏ hàng trong cơ sở dữ liệu
-        const cart = await Cart.findOne();
-        // Chuyển đổi id thành ObjectId
-        const bookId = mongoose.Types.ObjectId(id);
-        // Tìm vị trí của cuốn sách trong giỏ hàng
-        const index = cart.items.findIndex(item => item.bookId.equals(bookId));
+//       // Nếu không tìm thấy cuốn sách trong giỏ hàng, trả về lỗi 404
+//       if (index === -1) {
+//           return res.status(404).json({ message: 'Book not found in cart' });
+//       }
 
-        // Nếu không tìm thấy cuốn sách trong giỏ hàng, trả về lỗi 404
-        if (index === -1) {
-            return res.status(404).json({ message: 'Book not found in cart' });
-        }
+//       // Xóa cuốn sách khỏi giỏ hàng
+//       cart.items.splice(index, 1);
 
-        // Xóa cuốn sách khỏi giỏ hàng
-        cart.items.splice(index, 1);
+//       // Lưu lại giỏ hàng mới sau khi xóa
+//       await cart.save();
 
-        // Lưu lại giỏ hàng mới sau khi xóa
-        await cart.save();
+//       // Trả về thông báo thành công
+//       // return res.status(200).json({ message: 'Book removed from cart successfully' });
+//       res.render('client/cart')
+//   } catch (error) {
+//       // Xử lý lỗi nếu có
+//       console.error('Error removing book from cart:', error);
+//       return res.status(500).json({ error: 'Internal server error' });
+//   }
 
-        // Trả về thông báo thành công
-        return res.status(200).json({ message: 'Book removed from cart successfully' });
-    } catch (error) {
-        // Xử lý lỗi nếu có
-        console.error('Error removing book from cart:', error);
-        return res.status(500).json({ error: 'Internal server error' });
-    }
-  }
+// }
+
 }
 module.exports = new UserController();
