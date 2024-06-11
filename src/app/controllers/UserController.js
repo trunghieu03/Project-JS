@@ -116,10 +116,44 @@ class UserController {
   }
 
 //hien thi cart
-  async cart(req, res, next) {
-    const cart = await Cart.findOne().populate('items.bookId');
-    res.render('client/cart', { cart: mongooseToObject(cart) });
+async cart(req, res, next) {
+  try {
+      const cart = await Cart.findOne().populate('items.bookId');
+      
+      if (!cart || cart.items.length === 0) {
+          return res.render('client/cart', { cart: null, message: 'Giỏ hàng của bạn hiện đang trống.' });
+      }
+
+      // Xử lý dữ liệu giỏ hàng để gộp các mục có bookId trùng nhau (nếu có)
+      const processedItems = [];
+      const itemMap = new Map();
+
+      for (const item of cart.items) {
+          const itemId = item.bookId._id.toString();
+          if (itemMap.has(itemId)) {
+              const existingItem = itemMap.get(itemId);
+              existingItem.quantity += item.quantity;
+              existingItem.price += item.price * item.quantity; // Adjust the total price correctly
+          } else {
+              itemMap.set(itemId, {
+                  bookId: item.bookId,
+                  name: item.name,
+                  quantity: item.quantity,
+                  price: item.price * item.quantity, // Adjust the total price correctly
+                  productImage: item.productImage
+              });
+          }
+      }
+
+      processedItems.push(...itemMap.values());
+
+      res.render('client/cart', { cart: { items: processedItems, totalPrice: cart.totalPrice } });
+  } catch (error) {
+      console.error(error);
+      next(error);
   }
+}
+
 
 
   async deleteItemCart(req, res, next) {
